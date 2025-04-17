@@ -1,11 +1,13 @@
 package io.camunda.client.dentist.service;
 
 import io.camunda.client.dentist.model.User;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
 
 @Service
 public class UserService {
@@ -18,24 +20,35 @@ public class UserService {
         this.restTemplate = restTemplate;
     }
 
-    public void registerUser(User user) {
-        restTemplate.postForObject(SERVER_URL + "/client/register", user, User.class);
+    public ResponseEntity<User> registerUser(User user) {
+        return restTemplate.postForEntity(SERVER_URL + "/client/register", user, User.class);
     }
 
-    public void authenticateUser() {
-        restTemplate.postForObject(SERVER_URL + "/client/authenticate", true, Boolean.class);
+    public ResponseEntity<Boolean> authenticateUser(User user) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<User> entity = new HttpEntity<>(user, headers);
+        return restTemplate.postForEntity(SERVER_URL + "/client/authenticate", entity, Boolean.class);
     }
 
     public void startProcess(User user) {
         restTemplate.postForObject(SERVER_URL + "/client/start", user, User.class);
     }
 
-    public void login() {
-        restTemplate.postForObject(SERVER_URL + "/client/login", true, Boolean.class);
-    }
+    public ResponseEntity<User> startLogin(User user) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<User> entity = new HttpEntity<>(user, headers);
 
-    public ResponseEntity<HashMap> startLogin(User user) {
-        return restTemplate.getForEntity(SERVER_URL + "/client/login?name=" + user.getName(), HashMap.class);
+        try {
+            return restTemplate.postForEntity(
+                    SERVER_URL + "/client/login",
+                    entity,
+                   User.class
+            );
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        }
     }
 
 

@@ -4,19 +4,19 @@ public class User {
 
     private Long id;
 
-    private String name;
+    private String username;
 
     private String password;
 
     private String phoneNumber;
 
     public User(String name, String password) {
-        this.name = name;
+        this.username = name;
         this.password = password;
     }
 
     public User(String name, String password, String phoneNumber) {
-        this.name = name;
+        this.username = name;
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
@@ -32,12 +32,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     public String getPassword() {

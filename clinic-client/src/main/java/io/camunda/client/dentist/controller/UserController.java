@@ -2,15 +2,18 @@ package io.camunda.client.dentist.controller;
 
 import io.camunda.client.dentist.model.User;
 import io.camunda.client.dentist.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -32,14 +35,25 @@ public class UserController {
             @RequestParam("username") String username,
             @RequestParam("password") String pass,
             @RequestParam("number") String number,
-            Model model
+            Model model,
+            RedirectAttributes redirectAttributes
     ) {
         try {
             User user = new User(username, pass, number);
-            userService.registerUser(user);
-            userService.authenticateUser();
-            userService.startProcess(user);
-            return "dashboard";
+            ResponseEntity<User> registerResponse = userService.registerUser(user);
+            if (registerResponse.getStatusCode() != HttpStatus.OK || registerResponse.getBody() == null) {
+                model.addAttribute("error", "Registration failed: User not registered");
+                return "register";
+            }
+            User registeredUser = registerResponse.getBody();
+            ResponseEntity<Boolean> response = userService.authenticateUser(registeredUser);
+            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null || !response.getBody()) {
+                model.addAttribute("error", "Registration failed: User not authenticated");
+                return "register";
+            }
+            userService.startProcess(registeredUser);
+            redirectAttributes.addFlashAttribute("user", registeredUser);
+            return "redirect:/dashboard?id=" + registeredUser.getId();
 
         } catch (Exception e) {
             LOG.error("Error during registration: {}", e.getMessage());
@@ -50,13 +64,7 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-        try {
-            userService.login();
-            return "index";
-        } catch (RestClientException e) {
-            LOG.error("Error during client start request", e);
-            return "register";
-        }
+        return "index";
     }
 
     @GetMapping("/")
@@ -65,34 +73,39 @@ public class UserController {
     }
 
     @RequestMapping(value = "/dashboard")
-    public String dash(@RequestParam("id") Long id, Model model) {
-        model.addAttribute("id", id);
+    public String dash() {
         return "dashboard";
     }
 
-    @RequestMapping(value = "/loginUser")
-    public String loginUser(@RequestParam("username") String name,
-                            @RequestParam("password") String pass,
-                            Model model) {
-        User user = new User(name, pass);
-        var rt = userService.startLogin(user);
-        if (rt.getBody() == null) {
-            LOG.info("Password is not correct or user does not exist");
-            model.addAttribute("message", "Password is not correct or user does not exist");
+    @PostMapping("/loginUser")
+    public String loginUser(
+            @RequestParam String username,
+            @RequestParam String password,
+            Model model,
+            HttpSession session,
+            RedirectAttributes redirectAttributes){
+
+        try {
+            User user = new User(username, password);
+            ResponseEntity<User> loginResponse = userService.startLogin(user);
+
+            if (loginResponse.getStatusCode() == HttpStatus.UNAUTHORIZED
+                    || loginResponse.getBody() == null
+                    || loginResponse.getStatusCode() != HttpStatus.OK) {
+                model.addAttribute("message", "Invalid username or password");
+                return "index";
+            }
+
+            User loginUser = loginResponse.getBody();
+            long userId = loginUser.getId();
+            session.setAttribute("userId", loginUser.getId());
+            redirectAttributes.addFlashAttribute("user", loginUser);
+            return "redirect:/dashboard?id=" + userId;
+
+        } catch (Exception e) {
+            model.addAttribute("message", "Login service unavailable. Please try again later.");
             return "index";
         }
-        String id = String.valueOf(rt.getBody().get("id"));
-        String password = String.valueOf(rt.getBody().get("password"));
-        if (password == null || !password.equals(pass)) {
-            LOG.info("Password is not correct");
-            model.addAttribute("message", "Password is not correct");
-            return "index";
-        }
-        model.addAttribute("pw", password);
-        model.addAttribute("id", id);
-        userService.authenticateUser();
-        model.addAttribute("message", "");
-        return "dashboard";
     }
 
 
