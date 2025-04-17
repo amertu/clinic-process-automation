@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+
+camunda:
+    bpm:
+      filter:
+        create: All tasks
+      auto-deployment-enabled: true
+      admin-user:
+        id: demo
+        password: demo
+        first-name: demo
+      database:
+        type: h2
+      job-execution:
+        enabled: true
+      default-serialization-format: application/json
+      history-level: full
+      deployment-resource-pattern: classpath*:processes/*.bpmn
+
+
+
+
+debug: true
