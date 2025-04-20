@@ -1,42 +1,50 @@
 package io.camunda.server.dentist.controller;
 
 import ch.qos.logback.classic.Logger;
-import io.camunda.server.dentist.model.User;
+import io.camunda.server.dentist.dto.*;
+import io.camunda.server.dentist.repository.TreatmentRepository;
 import io.camunda.server.dentist.repository.UserRepository;
 import io.camunda.server.dentist.service.ProcessService;
+import io.camunda.server.dentist.validation.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/client")
 public class UserController {
 
     Logger LOG = (Logger) LoggerFactory.getLogger(UserController.class);
-    private final ProcessService processService;
-    private final UserRepository userRepository;
-
-    public UserController(ProcessService processService, UserRepository userRepository) {
-        this.processService = processService;
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private ProcessService processService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private TreatmentRepository treatmentRepository;
 
     @Transactional
     @PostMapping("/register")
     public ResponseEntity <User> registerUser(@RequestBody User user) {
-        LOG.info("Received registration for user: {}", user.getName());
+        LOG.info("Received registration for user: {}", user.getUsername());
+        boolean existingUser = userRepository.findByEmail(user.getEmail()).isPresent();
+        if (existingUser) {
+            throw new IllegalArgumentException("User with this email already exists.");
+        }
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/authenticate")
-    public boolean authenticateUser(@RequestBody boolean dummy) {
-        LOG.info("🔐 Dummy authentication done.");
-        return true;
+    public boolean authenticateUser(@RequestBody User user) {
+        User foundUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + user.getEmail() + " not found"));
+        LOG.info("Authentication user with name {} done.", foundUser.getUsername());
+        return user.getPassword().equals(foundUser.getPassword());
     }
 
     @PostMapping("/start")
@@ -46,22 +54,39 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public boolean startLogin() {
-        LOG.info("🔐 Dummy login start");
-        return true;
+    public ResponseEntity<ApiResponse<User>> loginUser(@RequestBody User user) {
+
+        User foundUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (!user.getPassword().equals(foundUser.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>("Invalid password", null));
+        }
+
+        ProcessInstance instance = processService.getUserProcessInstance(foundUser);
+
+        return ResponseEntity.ok(new ApiResponse<User>("login succeed", instance.getProcessInstanceId(), foundUser));
     }
 
-    @PostMapping("/client/login?name={name}")
-    public ResponseEntity <User> loginUser(User user) {
-        LOG.info("login task start");
-        User savedUser = userRepository.findByUsernameAndPassword(user.getName(), user.getPassword())
-                .orElse(null);
-        if (savedUser == null) {
-            LOG.error("User not found with ID: {}", user.getId());
-            return ResponseEntity.notFound().build();
-        }
-        LOG.info("User found: {}", savedUser.getName());
-        processService.completeLoginTask(savedUser);
-        return ResponseEntity.ok(savedUser);
+    @PostMapping("/request-treatment")
+    public ResponseEntity<String> sendTreatmentRequest(@RequestBody Treatment treatment) {
+        treatmentRepository.save(treatment);
+        processService.startClinicProcess(treatment);
+        return ResponseEntity.ok("Treatment request sent and process started.");
     }
+
+    @GetMapping("/task")
+    public ResponseEntity<ApiResponse<ProcessTaskDto>> getTask(@RequestBody String processId) {
+        Task task = processService.getTaskByProcessInstanceId(processId);
+
+        if (task == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>("Task not found", null));
+        }
+
+        ProcessTaskDto dto = TaskMapper.from(task);
+        return ResponseEntity.ok(new ApiResponse<ProcessTaskDto>("Task found", task.getProcessInstanceId(), dto));
+    }
+
+
 }

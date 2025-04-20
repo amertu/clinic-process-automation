@@ -1,28 +1,27 @@
-package io.camunda.server.dentist.model;
+package io.camunda.client.dentist.dto;
 
-import jakarta.persistence.*;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "users")
-public class User {
+public class User implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String email;
+
+    private String username;
 
     private String password;
 
     private String phoneNumber;
 
-    public User(String name, String password) {
-        this.name = name;
+    public User(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
-    public User(String name, String password, String phoneNumber) {
-        this.name = name;
+    public User(String email, String name, String password, String phoneNumber) {
+        this.email = email;
+        this.username = name;
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
@@ -38,12 +37,20 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     public String getPassword() {

@@ -1,10 +1,29 @@
-package io.camunda.client.dentist.model;
+package io.camunda.server.dentist.dto;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.sql.Time;
 import java.util.Date;
 
+@Entity
 public class Treatment {
-    private Integer id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long userId;
+
+    private String processInstanceId;
+
+    private AppointmentStatus status;
+
+    public enum AppointmentStatus {
+        ACTIVE, COMPLETED, CANCELED
+    }
 
     private String type;
 
@@ -12,20 +31,24 @@ public class Treatment {
 
     private Time time;
 
-    private Long userId;
-
-    private String status;
-
     private boolean next;
 
     private  String notes;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
     }
 
     public String getType() {
@@ -44,11 +67,11 @@ public class Treatment {
         this.userId = userId;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 

@@ -36,7 +36,7 @@
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input100" type="number" name="id" placeholder="User ID" id="name" required>
+						<input class="input100" type="email" name="email" placeholder="User ID" id="email" required>
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-envelope" aria-hidden="true"></i>
@@ -557,7 +557,7 @@
 				, confirm_password = document.getElementById("pw");
 
 		function validatePassword(){
-			if(password.value != confirm_password.value) {
+			if(password.value !== confirm_password.value) {
 				confirm_password.setCustomValidity("Password is not correct");
 			} else {
 				confirm_password.setCustomValidity('');

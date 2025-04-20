@@ -30,7 +30,7 @@
                 <img src="img01.png" alt="IMG">
             </div>
 
-            <form action="requestSent" class="login100-form validate-form">
+            <form action="sendRequest" class="login100-form validate-form"  method="post">
 					<span class="login100-form-title">
 						Treatment request
 					</span>
@@ -45,7 +45,7 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <input class="input100" type="hidden" name="id" th:value="${id}" readonly>
+                <input class="input100" type="hidden" name="userId" th:value="${userId}" readonly>
                 <div class="wrap-input100 validate-input">
                     <input class="input100" type="date" id="date" name="date" placeholder="Date : dd/mm/yyyy" required>
                     <span class="focus-input100"></span>

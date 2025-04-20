@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan("io.camunda.server.dentist.model")
+@EntityScan("io.camunda.server.dentist.dto")
 public class DentistCamundaServerApplication {
 
 	public static void main(String... args) {

@@ -31,6 +31,14 @@ camunda:
       history-level: full
       deployment-resource-pattern: classpath*:processes/*.bpmn
 
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate=TRACE:
+
 
 
 

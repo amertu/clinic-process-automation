@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Login V1</title>
+	<title>Treatment Request</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -29,44 +29,64 @@
 				<div class="login100-pic js-tilt" data-tilt>
 					<img src="img01.png" alt="IMG">
 				</div>
+				<form class="login100-form validate-form">
 
-				<form action = "loginUser" class="login100-form validate-form"  method="post" modelAttribute="client">
-					<span class="login100-form-title">
-						User Login
-					</span>
+					<style>
+						.request-info {
+							display: flex;
+							flex-wrap: wrap;
+							gap: 20px; /* Space between name and value */
+							margin-bottom: 10px;
+						}
 
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input100" type="email" name="email" placeholder="Email address" id="email" required aria-label="Email address">
-						<span class="focus-input100"></span>
-						<span class="symbol-input100">
-							<i class="fa fa-envelope" aria-hidden="true"></i>
-						</span>
+						.request-info div {
+							display: inline-flex;
+							align-items: center;
+						}
+
+						.request-info strong {
+							margin-right: 10px; /* Space between label and value */
+						}
+					</style>
+					<p>Your appointment was sent successfully!</p><br>
+					<p>We will review your request and contact you by mail.</p><br>
+					<div class="request-info">
+						<div><strong>Request information</strong></div>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate = "Password is required">
-						<input class="input100" type="password" name="password" placeholder="Password" id="password" required aria-label="Password">
-						<span class="focus-input100"></span>
-						<span class="symbol-input100">
-							<i class="fa fa-lock" aria-hidden="true"></i>
-						</span>
-						<input id="message" name="message" th:value="${message}" readonly style="color: red; width: 500px" >
-
-					</div>
-					
-					<div class="container-login100-form-btn">
-						<input type="submit" class="login100-form-btn" name="Login">
+					<!-- Request Information Section -->
+					<div class="request-info">
+						<div>Name:</div>
+						<div><span th:text="${userName}"></span></div>
 					</div>
 
-					<div class="text-center p-t-136">
-						<a class="txt2" href="/register">
-							Create your Account
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
+					<div class="request-info">
+						<div>Date:</div>
+						<div><span th:text="${date}"></span></div>
+					</div>
+
+					<div class="request-info">
+						<div>Time:</div>
+						<div><span th:text="${time}"></span></div>
+					</div>
+
+					<div class="request-info">
+						<div>Treatment:</div>
+						<div><span th:text="${type}"></span></div>
+					</div>
+
+					<div class="request-info">
+						<div>Notes:</div>
+						<div><span th:text="${notes}"></span></div>
 					</div>
 				</form>
+
+
 			</div>
 		</div>
 	</div>
+
+
 
 	<style>
 
@@ -78,22 +98,22 @@
 
 		@font-face {
 			font-family: Poppins-Regular;
-			src: url('/fonts/poppins/Poppins-Regular.ttf');
+			src: url('../fonts/poppins/Poppins-Regular.ttf');
 		}
 
 		@font-face {
 			font-family: Poppins-Bold;
-			src: url('/fonts/poppins/Poppins-Bold.ttf');
+			src: url('../fonts/poppins/Poppins-Bold.ttf');
 		}
 
 		@font-face {
 			font-family: Poppins-Medium;
-			src: url('/fonts/poppins/Poppins-Medium.ttf');
+			src: url('../fonts/poppins/Poppins-Medium.ttf');
 		}
 
 		@font-face {
 			font-family: Montserrat-Bold;
-			src: url('/fonts/montserrat/Montserrat-Bold.ttf');
+			src: url('../fonts/montserrat/Montserrat-Bold.ttf');
 		}
 
 		/*//////////////////////////////////////////////////////////////////
@@ -155,7 +175,6 @@
 		input {
 			outline: none;
 			border: none;
-			word-wrap:break-word;
 		}
 
 		textarea {
@@ -260,7 +279,7 @@
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-between;
-			padding: 177px 130px 33px 95px;
+			padding: 170px 130px 33px 95px;
 		}
 
 		/*------------------------------------------------------------------
@@ -277,7 +296,7 @@
 		/*------------------------------------------------------------------
         [  ]*/
 		.login100-form {
-			width: 290px;
+			width: 40%;
 		}
 
 		.login100-form-title {
@@ -315,7 +334,6 @@
 			padding: 0 30px 0 68px;
 		}
 
-
 		/*------------------------------------------------------------------
         [ Focus ]*/
 		.focus-input100 {
@@ -330,6 +348,12 @@
 			box-shadow: 0px 0px 0px 0px;
 			color: rgba(87,184,70, 0.8);
 		}
+
+		.login100-form p, .login100-form div, .login100-form span {
+			font-size: 14px;
+		}
+
+
 
 		.input100:focus + .focus-input100 {
 			-webkit-animation: anim-shadow 0.5s ease-in-out forwards;
@@ -533,7 +557,6 @@
 			}
 		}
 	</style>
-
 	
 <!--===============================================================================================-->	
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -551,20 +574,6 @@
 	</script>
 <!--===============================================================================================-->
 	<script src="js/main.js"></script>
-
-	<script>
-		var password = document.getElementById("password")
-				, confirm_password = document.getElementById("pw");
-
-		function validatePassword(){
-			if(password.value != confirm_password.value) {
-				confirm_password.setCustomValidity("Password is not correct");
-			} else {
-				confirm_password.setCustomValidity('');
-			}
-		}
-
-	</script>
 
 </body>
 </html>
