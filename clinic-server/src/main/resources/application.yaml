@@ -13,7 +13,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-
 camunda:
     bpm:
       filter:
@@ -39,7 +38,11 @@ logging:
           client:
             RestTemplate=TRACE:
 
+client:
+  base:
+    url: ${CLIENT_BASE_URL:http://localhost:8081}
 
-
+server:
+  port: ${SERVER_PORT:8080}
 
 debug: true

@@ -1,28 +1,28 @@
 version: '3.8'
 
 services:
-  dentist-server:
+  clinic-server:
     build:
-      context: ./dentist-server
-    container_name: dentist-server
+      context: ./clinic-server
+    container_name: clinic-server
     ports:
-      - "${CAMUNDA_PORT}:8080"
+      - "${SERVER_PORT}:8080"
     networks:
-      - dentist-net
+      - clinic-net
 
-  dentist-client:
+  clinic-client:
     build:
-      context: ./dentist-client
-    container_name: dentist-client
+      context: ./clinic-client
+    container_name: clinic-client
     ports:
       - "${CLIENT_PORT}:8080"
     depends_on:
-      - dentist-server
+      - clinic-server
     environment:
-      CAMUNDA_API_URL: "http://dentist-server:8080/engine-rest"
+      CAMUNDA_API_URL: "http://clinic-server:8080/engine-rest"
     networks:
-      - dentist-net
+      - clinic-net
 
 networks:
-  dentist-net:
+  clinic-net:
     driver: bridge

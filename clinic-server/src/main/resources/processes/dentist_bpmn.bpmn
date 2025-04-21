@@ -151,12 +151,12 @@
     </bpmn:sequenceFlow>
     <bpmn:startEvent id="StartEvent_1" name="checkup &#10;request">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.server.dentist.GatewayDelegate" event="start" />
+        <camunda:executionListener class="io.camunda.server.clinic.delegate.GatewayDelegate" event="start" />
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_08djg8k</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_08djg8k" sourceRef="StartEvent_1" targetRef="serviceTask_eligibilityCheck" />
-    <bpmn:serviceTask id="serviceTask_eligibilityCheck" name="User Eligibility Check" camunda:class="io.camunda.server.dentist.EligibilityCheckDelegate">
+    <bpmn:serviceTask id="serviceTask_eligibilityCheck" name="User Eligibility Check" camunda:class="io.camunda.server.clinic.delegate.EligibilityCheck">
       <bpmn:incoming>Flow_08djg8k</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1eao4qw</bpmn:outgoing>
       <bpmn:dataOutputAssociation id="DataOutputAssociation_0qfo0ld">
@@ -225,7 +225,7 @@
     </bpmn:laneSet>
     <bpmn:manualTask id="Task_0bjrmbp" name="Patient examination">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.server.dentist.GatewayDelegate" event="start" />
+        <camunda:executionListener class="io.camunda.server.clinic.delegate.GatewayDelegate" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0mg80dw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1huq49i</bpmn:outgoing>
@@ -261,7 +261,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:manualTask id="Task_0ted7la" name="review request">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.server.dentist.GatewayDelegate" event="start" />
+        <camunda:executionListener class="io.camunda.server.clinic.delegate.GatewayDelegate" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0fvbi4e</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1lao3sv</bpmn:outgoing>
@@ -281,7 +281,7 @@
     </bpmn:userTask>
     <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0u5gy9m">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.server.dentist.GatewayDelegate" event="start" />
+        <camunda:executionListener class="io.camunda.server.clinic.delegate.GatewayDelegate" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1g6uv9o</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1vqddnn</bpmn:outgoing>
@@ -302,13 +302,13 @@
       <bpmn:incoming>SequenceFlow_00qd6cc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0fvbi4e</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="order_product" name="order product" camunda:class="io.camunda.app.dentist.OrdeerProducts">
+    <bpmn:serviceTask id="order_product" name="order product" camunda:class="io.camunda.app.clinic.OrdeerProducts">
       <bpmn:incoming>SequenceFlow_0htz2eo</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ar68o5</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Task_15an9ix" name="Send Email" camunda:class="io.camunda.server.dentist.SendEmail">
+    <bpmn:sendTask id="Task_15an9ix" name="Send Email" camunda:class="io.camunda.server.clinic.delegate.SendEmail">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.server.dentist.SendEmail" event="start" />
+        <camunda:executionListener class="io.camunda.server.clinic.delegate.SendEmail" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1rw9l77</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1g6uv9o</bpmn:outgoing>
@@ -320,7 +320,7 @@
     <bpmn:endEvent id="EndEvent_1eg3shq">
       <bpmn:incoming>SequenceFlow_0r6f5e6</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:businessRuleTask id="Task_02ljvtn" name="Check out patient" camunda:class="io.camunda.server.dentist.CheckOut">
+    <bpmn:businessRuleTask id="Task_02ljvtn" name="Check out patient" camunda:class="io.camunda.server.clinic.delegate.CheckOut">
       <bpmn:incoming>SequenceFlow_13pp3ve</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1m1nsi5</bpmn:outgoing>
       <bpmn:dataOutputAssociation id="DataOutputAssociation_0cfjykf">
@@ -384,7 +384,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_11iqzvm" sourceRef="IntermediateThrowEvent_0srao34" targetRef="ExclusiveGateway_0dm48t5" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_15fo3br">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.server.dentist.GatewayDelegate" event="start" />
+        <camunda:executionListener class="io.camunda.server.clinic.delegate.GatewayDelegate" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1aphybk</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0dm0kk0</bpmn:outgoing>
@@ -414,9 +414,9 @@
         <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${duration}</bpmn:timeDate>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:sendTask id="Task_06o5dkq" name="send feedback form" camunda:class="io.camunda.server.dentist.SendFeadbackForm">
+    <bpmn:sendTask id="Task_06o5dkq" name="send feedback form" camunda:class="io.camunda.server.clinic.delegate.SendFeadbackForm">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.app.dentist.SendFeedbackForm" event="start" />
+        <camunda:executionListener class="io.camunda.app.clinic.SendFeedbackForm" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_13u0d5m</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0r6f5e6</bpmn:outgoing>
@@ -447,7 +447,7 @@
       <bpmn:incoming>SequenceFlow_0qulvv8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0jno45u</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:serviceTask id="Task_0rk8z1b" name="send product" camunda:class="io.camunda.server.dentist.SendProducts">
+    <bpmn:serviceTask id="Task_0rk8z1b" name="send product" camunda:class="io.camunda.server.clinic.delegate.SendProducts">
       <bpmn:incoming>SequenceFlow_0jno45u</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1hlh4mv</bpmn:outgoing>
     </bpmn:serviceTask>
