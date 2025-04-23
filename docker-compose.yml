@@ -1,28 +1,64 @@
-version: '3.8'
-
 services:
+  postgres:
+    image: postgres:15.2
+    restart: always
+    container_name: postgres-clinic
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      JDBC_URL: ${JDBC_URL}
+    ports:
+        - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      retries: 3
+      start_period: 5s
+      timeout: 10s
+
   clinic-server:
+    depends_on:
+      postgres:
+        condition: service_healthy
     build:
       context: ./clinic-server
+      dockerfile: Dockerfile
     container_name: clinic-server
+    env_file: .env
     ports:
-      - "${SERVER_PORT}:8080"
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      CAMUNDA_USER: ${CAMUNDA_USER}
+      CAMUNDA_PASSWORD: ${CAMUNDA_PASSWORD}
+      SERVER_PORT: ${SERVER_PORT}
     networks:
-      - clinic-net
+      - clinic-network
 
   clinic-client:
-    build:
-      context: ./clinic-client
-    container_name: clinic-client
-    ports:
-      - "${CLIENT_PORT}:8080"
     depends_on:
       - clinic-server
+    build:
+      context: ./clinic-client
+      dockerfile: Dockerfile
+    container_name: clinic-client
+    env_file: .env
+    ports:
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
     environment:
-      CAMUNDA_API_URL: "http://clinic-server:8080/engine-rest"
+      - SERVER_PORT=${CLIENT_PORT}
+      - SERVER_BASE_URL=${DOC_SERVER_BASE_URL}
     networks:
-      - clinic-net
+      - clinic-network
+
+volumes:
+  postgres_data:
 
 networks:
-  clinic-net:
-    driver: bridge
+    clinic-network:
+      driver: bridge

@@ -8,11 +8,12 @@
 		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>io.camunda.server.clinic</groupId>
-	<artifactId>clinic</artifactId>
+	<artifactId>clinic-process-automation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>clinic</name>
-	<description>Clinic project</description>
+	<name>Clinic Process Automation</name>
+	<description>A Camunda-based process automation solution for managing clinic operations</description>
 
 	<properties>
 		<java.version>17</java.version>
@@ -30,10 +31,6 @@
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
 			<version>${camunda.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
@@ -58,6 +55,11 @@
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.3</version>
 		</dependency>
 
 

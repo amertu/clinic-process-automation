@@ -1,48 +1,39 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:test
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: ${JDBC_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
 
 camunda:
-    bpm:
-      filter:
-        create: All tasks
-      auto-deployment-enabled: true
-      admin-user:
-        id: demo
-        password: demo
-        first-name: demo
-      database:
-        type: h2
-      job-execution:
-        enabled: true
-      default-serialization-format: application/json
-      history-level: full
-      deployment-resource-pattern: classpath*:processes/*.bpmn
+  bpm:
+    database:
+      type: postgres
+    filter:
+      create: All tasks
+    auto-deployment-enabled: true
+    admin-user:
+      id: ${CAMUNDA_USER}
+      password: ${CAMUNDA_PASSWORD}
+      first-name: Admin
+    job-execution:
+      enabled: true
+    default-serialization-format: application/json
+    history-level: full
+    deployment-resource-pattern: classpath*:processes/*.bpmn
+
 
 logging:
   level:
-    org:
-      springframework:
-        web:
-          client:
-            RestTemplate=TRACE:
+    org.springframework.web.client.RestTemplate: TRACE
 
-client:
-  base:
-    url: ${CLIENT_BASE_URL:http://localhost:8081}
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT}
+
 
 debug: true

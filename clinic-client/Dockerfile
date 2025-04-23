@@ -1,5 +1,12 @@
+# ====== Build Stage ======
+FROM maven:3.8.7-eclipse-temurin-17 AS build
+WORKDIR /client
+COPY . .
+RUN mvn clean package -DskipTests
+
+# ====== Runtime Stage ======
 FROM openjdk:17-jdk-slim
-VOLUME /tmp
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} client.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+WORKDIR /client
+COPY --from=build /client/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8081
