@@ -52,7 +52,7 @@ services:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     environment:
       - SERVER_PORT=${CLIENT_PORT}
-      - SERVER_BASE_URL=${DOC_SERVER_BASE_URL}
+      - SERVER_BASE_URL=${SERVER_BASE_URL}
     networks:
       - clinic-network
 
