@@ -1,0 +1,8 @@
+services:
+  postgres:
+    ports:
+        - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+
+  clinic-server:
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
