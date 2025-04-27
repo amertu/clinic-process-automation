@@ -48,6 +48,8 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/amertu/clinic-process-automation.git
         git add resources/badge/build-status.svg
         git commit -m "Update build badge based on latest build result" || echo "No changes to commit"
         git push
+
