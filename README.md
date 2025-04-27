@@ -1,5 +1,6 @@
 
-![build](https://img.shields.io/jenkins/coverage/:format?jobUrl=13.48.80.81%3A8083%2Fjob%2Fclinic-process-automation-build-pipeline%2F)
+![build](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2F13.48.80.81%3A8083%2Fjob%2Fclinic-process-automation-build-pipeline%2F
+)
 
 
 
