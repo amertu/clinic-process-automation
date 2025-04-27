@@ -1,12 +1,12 @@
-
-![build](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2F13.48.80.81%3A8083%2Fjob%2Fclinic-process-automation-build-pipeline%2F
-)
-
-
-
-
-
 # Clinic Process Automation
+
+![Build Status](https://raw.githubusercontent.com/amertu/clinic-process-automation/main/resources/badge/build-status.svg)
+![Docker Compose](https://img.shields.io/badge/Docker-%E2%9C%94-blue?logo=docker&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-EC2-%23FF9900?logo=amazonec2&logoColor=white)
+![Jenkins](https://img.shields.io/badge/Jenkins-CI/CD-blue?logo=jenkins&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen?logo=spring&logoColor=white)
+![Camunda BPM](https://img.shields.io/badge/Camunda-7.23-orange?logo=camunda&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15.2-blue?logo=postgresql&logoColor=white)
 
 **Clinic Process Automation** is an end-to-end solution designed to streamline the administrative workflows within a dental clinic. This system automates patient scheduling, treatment tracking, and billing processes using **Spring Boot**, **Camunda BPM**, **Docker**, and **PostgreSQL**.
 
@@ -19,16 +19,31 @@
 - **Dockerized Solution:** Containerized with Docker for scalability and easy deployment across various environments.
 
 ---
+## Architecture
 
-### **Tech Stack**
-- **Backend:** Java, Spring Boot, Camunda BPM, Spring Data JPA
-- **Frontend:** JavaScript, HTML, CSS (for UI in the client service)
-- **Database:** PostgreSQL
-- **Containerization:** Docker
-- **Version Control:** Git, GitHub
-- **Workflow Engine:** Camunda BPM for process orchestration
+```text            
+                           Production (AWS EC2/ECS/EKS)
+                                      ▲
+                                      │ pull & run
+                                      │
+      GitHub Repo ─── webhook ──> Nginx (Reverse Proxy)
+         │                             │
+         │                             ├─> Jenkins CI
+         │                             │      ├─ run tests
+         │                             │      └─ build & push Docker images
+         │                             │            to AWS ECR (Registry)
+         │                             │
+         │                             └─> Application Containers
+         │                                    ├─ Camunda BPM Server (Spring Boot)
+         │                                    ├─ Client Service (Spring Boot)
+         │                                    └─ PostgreSQL Database
+         │
+         └─ Local Development (docker-compose)
+               ├─ Camunda BPM Server (Spring Boot)
+               ├─ Client Service (Spring Boot + HTML/CSS/JS)
+               └─ PostgreSQL
 
----
+```
 
 ### **Business Impact**
 
@@ -37,9 +52,3 @@
 - **Faster Checkout**: **30% faster patient checkouts** with real-time tracking and reduced manual intervention.
 
 ---
-
-### **Acknowledgements**
-
-- **Camunda BPM** for powerful workflow orchestration.
-- **Docker** for containerization, simplifying deployment.
-- **Spring Boot** for efficient and scalable Java-based backend development.
