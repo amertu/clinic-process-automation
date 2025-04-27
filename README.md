@@ -1,6 +1,6 @@
 # Clinic Process Automation
 
-[![Build Status](resources/badge/build-status.svg)](resources/badge/build-status.svg)
+![Build Status](https://img.shields.io/badge/Build%20Status-Passing-brightgreen?logo=githubactions&logoColor=white)
 ![Docker Compose](https://img.shields.io/badge/Docker-%E2%9C%94-blue?logo=docker&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-EC2-%23FF9900?logo=amazonec2&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/Jenkins-CI/CD-blue?logo=jenkins&logoColor=white)
