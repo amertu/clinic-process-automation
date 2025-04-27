@@ -1,5 +1,8 @@
 
-![Build Status](http://13.48.80.81:8083/job/clinic-process-automation-build-pipeline/badge/icon)
+![build](https://img.shields.io/jenkins/coverage/:format?jobUrl=13.48.80.81%3A8083%2Fjob%2Fclinic-process-automation-build-pipeline%2F)
+
+
+
 
 
 # Clinic Process Automation
