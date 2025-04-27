@@ -1,3 +1,7 @@
+
+![Build Status](http://13.48.80.81:8083/job/clinic-process-automation-build-pipeline/badge/icon)
+
+
 # Clinic Process Automation
 
 **Clinic Process Automation** is an end-to-end solution designed to streamline the administrative workflows within a dental clinic. This system automates patient scheduling, treatment tracking, and billing processes using **Spring Boot**, **Camunda BPM**, **Docker**, and **PostgreSQL**.
