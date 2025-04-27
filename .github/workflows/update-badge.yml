@@ -5,8 +5,11 @@ on:
     paths:
       - 'resources/build-status.txt'
     branches-ignore:
-      - 'gh-pages'
+    - 'gh-pages'
 
+permissions:
+  contents: write
+  
 jobs:
   update-badge:
     runs-on: ubuntu-latest
