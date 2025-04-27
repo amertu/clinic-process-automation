@@ -3,7 +3,7 @@ name: Update Build Status Badge
 on:
   push:
     paths:
-      - 'resources/build-status.txt'  # Trigger action only if build-status.txt changes
+      - 'resources/build-status.txt'
     branches-ignore:
       - 'gh-pages'
 
@@ -16,16 +16,15 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Read Build Status
-      id: read_status
       run: |
         STATUS=$(cat resources/build-status.txt)
         echo "Build Status: $STATUS"
         echo "status=$STATUS" >> $GITHUB_ENV
 
     - name: Set Badge Parameters
-      id: badge_params
       run: |
-        if [[ "$status" == "SUCCESS" ]]; then
+        echo "Using build status: ${{ env.status }}"
+        if [[ "${{ env.status }}" == "SUCCESS" ]]; then
           COLOR="brightgreen"
           MESSAGE="passing"
         else
