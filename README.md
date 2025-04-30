@@ -20,7 +20,7 @@
 
 ## Architecture
 
-```text            
+```markdown           
                                              Production (AWS EC2/ECS/EKS)
                                                         ▲
                                                         │ pull & run
