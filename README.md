@@ -1,4 +1,4 @@
-# Clinic Process Automation
+# Clinic Workflow Automation System
 
 ![Build Status](https://img.shields.io/badge/Build%20Status-Passing-brightgreen?logo=githubactions&logoColor=white)
 ![Docker Compose](https://img.shields.io/badge/Docker-%E2%9C%94-blue?logo=docker&logoColor=white)
