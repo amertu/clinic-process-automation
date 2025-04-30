@@ -7,6 +7,7 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen?logo=spring&logoColor=white)
 ![Camunda BPM](https://img.shields.io/badge/Camunda-7.23-orange?logo=camunda&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15.2-blue?logo=postgresql&logoColor=white)
+![Git](https://img.shields.io/badge/Git-2.49.0-f05133?logo=git&logoColor=white)
 
 **Clinic Process Automation** is an end-to-end solution designed to streamline the administrative workflows within a dental clinic. This system automates patient scheduling, treatment tracking, and billing processes using **Spring Boot**, **Camunda BPM**, **Docker**, and **PostgreSQL**.
 
