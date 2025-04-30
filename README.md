@@ -1,7 +1,7 @@
 # Clinic Workflow Automation System
 
 ![Build Status](https://img.shields.io/badge/Build%20Status-Passing-brightgreen?logo=githubactions&logoColor=white)
-![Docker Compose](https://img.shields.io/badge/Docker-%E2%9C%94-blue?logo=docker&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker-25.0.8-blue?logo=docker&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-EC2-%23FF9900?logo=amazonec2&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/Jenkins-2.507-blue?logo=jenkins&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen?logo=spring&logoColor=white)
