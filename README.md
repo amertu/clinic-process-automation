@@ -45,6 +45,6 @@
 ```
 ## Business Impact
 
-- **Efficiency Gains**: Streamlined administrative processes resulting in a **20% reduction in patient wait times**.
+- **Efficiency Gains**: Streamlined administrative processes resulting in **reduction in patient wait times**.
 - **Improved Resource Allocation**: Optimized **patient scheduling and treatment tracking**, improving resource utilization by **15%**.
-- **Faster Checkout**: **30% faster patient checkouts** with real-time tracking and reduced manual intervention.
+- **Faster Checkout**: **faster patient checkouts** with real-time tracking and reduced manual intervention.
