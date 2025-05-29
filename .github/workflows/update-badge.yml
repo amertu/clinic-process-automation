@@ -3,7 +3,7 @@ name: Update Build Status Badge
 on:
   push:
     paths:
-      - 'resources/build-status.txt'
+      - 'resources/build-status.json'
     branches-ignore:
       - 'gh-pages'
 
@@ -13,43 +13,27 @@ permissions:
 jobs:
   update-badge:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Read Build Status
-      id: read_status
-      run: |
-        STATUS=$(cat resources/build-status.txt)
-        echo "Build Status: $STATUS"
-        echo "status=$STATUS" >> $GITHUB_ENV
+      - name: Extract status from resources/build-status.json
+        run: |
+          STATUS=$(jq -r '.message' resources/build-status.json)
+          echo "status=$STATUS" >> "$GITHUB_ENV"
 
-    - name: Set Badge Parameters
-      id: badge_params
-      run: |
-        echo "Status from ENV: $status"
-        if [[ "${{ env.status }}" == "SUCCESS" ]]; then
-          COLOR="brightgreen"
-          MESSAGE="passing"
-        else
-          COLOR="red"
-          MESSAGE="failing"
-        fi
-        echo "color=$COLOR" >> $GITHUB_ENV
-        echo "message=$MESSAGE" >> $GITHUB_ENV
+      - name: Build badge JSON
+        run: |
+          if [[ "${{ env.status }}" == "success" ]]; then
+            echo '{"schemaVersion":1,"label":"build","message":"success","color":"green"}' > resources/build-badge.json
+          else
+            echo '{"schemaVersion":1,"label":"build","message":"failed","color":"red"}' > resources/build-badge.json
+          fi
 
-    - name: Generate Build Status Badge
-      run: |
-        mkdir -p resources/badge
-        curl -o resources/badge/build-status.svg "https://img.shields.io/badge/build-${{ env.message }}-${{ env.color }}.svg"
-
-    - name: Commit and Push Badge
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/amertu/clinic-process-automation.git
-        git add resources/badge/build-status.svg
-        git commit -m "Update build badge based on latest build result" || echo "No changes to commit"
-        git push https://x-access-token:${secrets.GH_TOKEN }@github.com/${{ github.repository }} HEAD
-
+      - name: Commit & push badge
+        if: github.actor != 'nektos/act'          # skip when running locally with act
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add resources/build-badge.json
+          git commit -m "CI: update build badge" || echo "Nothing to commit"
+          git push
