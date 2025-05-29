@@ -1,5 +1,5 @@
 # Clinic Workflow Automation System
-![Build](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/amertu/clinic-process-automation/main/resources/build-badge.json)
+[![Build](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/amertu/clinic-process-automation/main/resources/build-badge.json&label=build&green&logo=github&color=briightgreen)](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/amertu/clinic-process-automation/main/resources/build-badge.json)
 
 ![Docker Compose](https://img.shields.io/badge/Docker-25.0.8-blue?logo=docker&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-EC2-%23FF9900?logo=amazonec2&logoColor=white)
