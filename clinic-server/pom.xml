@@ -19,6 +19,8 @@
 		<java.version>17</java.version>
 		<spring-boot.version>3.2.5</spring-boot.version>
 		<camunda.version>7.23.0</camunda.version>
+		<postgresql.version>42.7.3</postgresql.version>
+		<kafka.version>3.5.0</kafka.version>
 	</properties>
 
 	<dependencies>
@@ -59,10 +61,12 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.7.3</version>
+			<version>${postgresql.version}</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -8,11 +8,17 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS_LOCAL:localhost:9092}
+    producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 camunda:
   bpm:
     database:
       type: postgres
+      schema-update: true
     filter:
       create: All tasks
     auto-deployment-enabled: true

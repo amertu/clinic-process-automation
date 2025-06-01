@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1ac13i7" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.34.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1ac13i7" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0">
   <bpmn:collaboration id="Collaboration_0noxxkb">
     <bpmn:extensionElements>
       <camunda:properties>
@@ -206,7 +206,7 @@
         <bpmn:flowNodeRef>EndEvent_1agin7k</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_1d470e1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_0dm48t5</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>IntermediateThrowEvent_0srao34</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>TimerCatchEvent_Wait1Sec</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0uyt9ro" name="Dentist">
         <bpmn:extensionElements>
@@ -275,7 +275,7 @@
       <bpmn:incoming>SequenceFlow_0g08xqc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1umztiv</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Task_0lz8l9v" name="treatment confirmation" camunda:assignee="demo">
+    <bpmn:userTask id="Task_0lz8l9v" name="treatment confirmation" camunda:assignee="camunda">
       <bpmn:incoming>SequenceFlow_182r2hf</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02n9jf4</bpmn:outgoing>
     </bpmn:userTask>
@@ -302,7 +302,7 @@
       <bpmn:incoming>SequenceFlow_00qd6cc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0fvbi4e</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="order_product" name="order product" camunda:class="io.camunda.app.clinic.OrdeerProducts">
+    <bpmn:serviceTask id="order_product" name="order product" camunda:delegateExpression="${orderProducts}">
       <bpmn:incoming>SequenceFlow_0htz2eo</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ar68o5</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -373,7 +373,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0hanl6k" sourceRef="ExclusiveGateway_0tg9ynp" targetRef="ExclusiveGateway_1d470e1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decline!=true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0x9snx8" sourceRef="ExclusiveGateway_1d470e1" targetRef="IntermediateThrowEvent_0srao34" />
+    <bpmn:sequenceFlow id="SequenceFlow_0x9snx8" sourceRef="ExclusiveGateway_1d470e1" targetRef="TimerCatchEvent_Wait1Sec" />
     <bpmn:sequenceFlow id="SequenceFlow_1aphybk" sourceRef="ExclusiveGateway_1d470e1" targetRef="ExclusiveGateway_15fo3br" />
     <bpmn:sequenceFlow id="SequenceFlow_0dm0kk0" sourceRef="ExclusiveGateway_15fo3br" targetRef="EndEvent_0ftb4no">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${error==true}</bpmn:conditionExpression>
@@ -381,7 +381,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_1j542gl" sourceRef="ExclusiveGateway_15fo3br" targetRef="ExclusiveGateway_0dm48t5">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${error!=true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_11iqzvm" sourceRef="IntermediateThrowEvent_0srao34" targetRef="ExclusiveGateway_0dm48t5" />
+    <bpmn:sequenceFlow id="SequenceFlow_11iqzvm" sourceRef="TimerCatchEvent_Wait1Sec" targetRef="ExclusiveGateway_0dm48t5" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_15fo3br">
       <bpmn:extensionElements>
         <camunda:executionListener class="io.camunda.server.clinic.delegate.GatewayDelegate" event="start" />
@@ -407,16 +407,16 @@
       <bpmn:incoming>SequenceFlow_11iqzvm</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0mg80dw</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_0srao34">
+    <bpmn:intermediateCatchEvent id="TimerCatchEvent_Wait1Sec" name="Wait 1 Second">
       <bpmn:incoming>SequenceFlow_0x9snx8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_11iqzvm</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${duration}</bpmn:timeDate>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:sendTask id="Task_06o5dkq" name="send feedback form" camunda:class="io.camunda.server.clinic.delegate.SendFeadbackForm">
+    <bpmn:sendTask id="Task_06o5dkq" name="send feedback form" camunda:class="io.camunda.server.clinic.delegate.SendFeedbackForm">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.camunda.app.clinic.SendFeedbackForm" event="start" />
+        <camunda:executionListener class="io.camunda.server.clinic.delegate.SendFeedbackForm" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_13u0d5m</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0r6f5e6</bpmn:outgoing>
@@ -427,7 +427,7 @@
     <bpmn:textAnnotation id="TextAnnotation_13p6qpe">
       <bpmn:text>Treatment request in the system</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_1t2uhto" sourceRef="IntermediateThrowEvent_0srao34" targetRef="TextAnnotation_0y06hzn" />
+    <bpmn:association id="Association_1t2uhto" sourceRef="TimerCatchEvent_Wait1Sec" targetRef="TextAnnotation_0y06hzn" />
     <bpmn:association id="Association_11m1o98" sourceRef="EndEvent_0ftb4no" targetRef="TextAnnotation_0ov4oue" />
     <bpmn:association id="Association_0oja1jh" sourceRef="ExclusiveGateway_1belo3m" targetRef="TextAnnotation_0rirn5l" />
     <bpmn:association id="Association_0uc99gg" sourceRef="StartEvent_15tl6wk" targetRef="TextAnnotation_13p6qpe" />
@@ -439,7 +439,8 @@
     </bpmn:textAnnotation>
   </bpmn:process>
   <bpmn:process id="lab_process" name="lab-process" isExecutable="true" camunda:historyTimeToLive="P30D">
-    <bpmn:startEvent id="StartEvent_0qmzvvj">
+    <bpmn:startEvent id="StartEvent_0qmzvvj" name="Lab Process Start">
+      <bpmn:extensionElements />
       <bpmn:outgoing>SequenceFlow_0qulvv8</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_1cdtr5b" />
     </bpmn:startEvent>
@@ -470,7 +471,7 @@
   <bpmn:error id="Error_1r8m2ax" name="Error_31fkhil" errorCode="404" />
   <bpmn:message id="Message_1xiandg" name="Message_2tifnnq" />
   <bpmn:message id="Message_0puy24q" name="Message_38vouof" />
-  <bpmn:message id="Message_1cdtr5b" name="Message_3e72nlr" />
+  <bpmn:message id="Message_1cdtr5b" name="LabProcessStartMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0noxxkb">
       <bpmndi:BPMNShape id="Participant_0eck9fl_di" bpmnElement="Participant_0eck9fl" isHorizontal="true">
@@ -777,8 +778,11 @@
       <bpmndi:BPMNShape id="ParallelGateway_13l5e5v_di" bpmnElement="ExclusiveGateway_0dm48t5">
         <dc:Bounds x="1705" y="1422" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_1ow2m70_di" bpmnElement="IntermediateThrowEvent_0srao34">
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_1ow2m70_di" bpmnElement="TimerCatchEvent_Wait1Sec">
         <dc:Bounds x="1613" y="1429" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1595" y="1399" width="72" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SendTask_03i3k9c_di" bpmnElement="Task_06o5dkq">
         <dc:Bounds x="2124" y="1098" width="100" height="80" />
@@ -1000,6 +1004,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_12kz9i3_di" bpmnElement="StartEvent_0qmzvvj">
         <dc:Bounds x="307" y="2211" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="281" y="2247" width="88" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ManualTask_0jj6t7g_di" bpmnElement="Task_15wkk8c">
         <dc:Bounds x="393" y="2189" width="100" height="80" />
@@ -1042,10 +1049,6 @@
         <di:waypoint x="1840" y="1107" />
         <di:waypoint x="2114" y="1107" />
         <di:waypoint x="2108" y="211" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1mzomct_di" bpmnElement="Association_1mzomct">
-        <di:waypoint x="2091" y="161" />
-        <di:waypoint x="2091" y="111" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MessageFlow_183qmj5_di" bpmnElement="MessageFlow_183qmj5">
         <di:waypoint x="750" y="708" />
@@ -1095,6 +1098,10 @@
       <bpmndi:BPMNEdge id="MessageFlow_0vg8xks_di" bpmnElement="MessageFlow_0vg8xks">
         <di:waypoint x="1798" y="622" />
         <di:waypoint x="1798" y="1078" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1mzomct_di" bpmnElement="Association_1mzomct">
+        <di:waypoint x="2091" y="161" />
+        <di:waypoint x="2091" y="111" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
