@@ -83,7 +83,3 @@ End-to-end BPMN-driven system for streamlining dental clinic operations. Automat
                          +-------------------------------------------+
 
 ```
-## Business Impact
-- **Increased Operational Efficiency:** Automated workflows reduced administrative overhead and significantly cut patient wait times.
-- **Optimized Resource Utilization:** Rule-based scheduling and real-time treatment tracking improved staff allocation and clinic throughput.
-- **Accelerated Checkout Process:** Streamlined billing and process integration enabled faster patient discharge with minimal manual steps.
