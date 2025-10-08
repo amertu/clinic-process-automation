@@ -1,5 +1,5 @@
-# Clinic Workflow Automation System
-End-to-end BPMN-driven system for streamlining dental clinic operations. Automates appointment handling, treatment tracking, lab coordination, and billing using containerized services, event-driven architecture, and Kubernetes orchestration.
+# Healthcare Workflow Automation System
+End-to-end BPMN-driven system for streamlining healthcare operations. Automates appointment handling, treatment tracking, lab coordination, and billing using containerized services, event-driven architecture, and Kubernetes orchestration.
 
 [![Build](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/amertu/clinic-process-automation/main/resources/build-status.json&label=build&green&logo=github&color=briightgreen)](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/amertu/clinic-process-automation/main/resources/build-status.json)
 
